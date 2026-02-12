@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "ninja.trek.glassshelf.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ContainerCloseShelfRefreshMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
