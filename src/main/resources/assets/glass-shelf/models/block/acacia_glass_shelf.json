@@ -2,21 +2,22 @@
   "parent": "minecraft:block/block",
   "textures": {
     "front": "glass-shelf:block/glass_front",
-    "back": "glass-shelf:block/glass_back",
+    "back": "minecraft:block/stripped_acacia_log",
+    "panel": "minecraft:block/stripped_acacia_log",
     "particle": "glass-shelf:block/glass_front"
   },
   "elements": [
     {
-      "name": "glass_pane",
+      "name": "back_pane",
       "from": [0, 0, 15],
       "to": [16, 16, 16],
       "faces": {
-        "north": { "texture": "#front" },
-        "south": { "texture": "#back" },
-        "east": { "texture": "#front" },
-        "west": { "texture": "#front" },
-        "up": { "texture": "#front" },
-        "down": { "texture": "#front" }
+        "north": { "texture": "#panel", "rotation": 90 },
+        "south": { "texture": "#back", "rotation": 90 },
+        "east": { "texture": "#panel" },
+        "west": { "texture": "#panel" },
+        "up": { "texture": "#panel" },
+        "down": { "texture": "#panel" }
       }
     },
     {

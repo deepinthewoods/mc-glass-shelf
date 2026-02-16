@@ -1,3 +1,17 @@
 {
-  "block.glass-shelf.glass_shelf": "Glass Shelf"
+  "block.glass-shelf.glass_shelf": "Glass Shelf",
+  "block.glass-shelf.oak_glass_shelf": "Oak Glass Shelf",
+  "block.glass-shelf.spruce_glass_shelf": "Spruce Glass Shelf",
+  "block.glass-shelf.birch_glass_shelf": "Birch Glass Shelf",
+  "block.glass-shelf.jungle_glass_shelf": "Jungle Glass Shelf",
+  "block.glass-shelf.acacia_glass_shelf": "Acacia Glass Shelf",
+  "block.glass-shelf.dark_oak_glass_shelf": "Dark Oak Glass Shelf",
+  "block.glass-shelf.mangrove_glass_shelf": "Mangrove Glass Shelf",
+  "block.glass-shelf.cherry_glass_shelf": "Cherry Glass Shelf",
+  "block.glass-shelf.pale_oak_glass_shelf": "Pale Oak Glass Shelf",
+  "block.glass-shelf.crimson_glass_shelf": "Crimson Glass Shelf",
+  "block.glass-shelf.warped_glass_shelf": "Warped Glass Shelf",
+  "block.glass-shelf.bamboo_glass_shelf": "Bamboo Glass Shelf",
+  "glass-shelf.config.title": "Glass Shelf Settings",
+  "glass-shelf.config.three_item_mode": "3-Item Display Mode"
 }

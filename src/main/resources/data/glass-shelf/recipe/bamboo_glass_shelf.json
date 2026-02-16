@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "   ",
+    "OOO"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "O": "minecraft:stripped_bamboo_block"
+  },
+  "result": {
+    "id": "glass-shelf:bamboo_glass_shelf",
+    "count": 1
+  }
+}

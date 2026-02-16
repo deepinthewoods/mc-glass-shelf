@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,waterlogged=false": { "model": "glass-shelf:block/cherry_glass_shelf" },
+    "facing=south,waterlogged=false": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 180 },
+    "facing=west,waterlogged=false": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 270 },
+    "facing=east,waterlogged=false": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 90 },
+    "facing=north,waterlogged=true": { "model": "glass-shelf:block/cherry_glass_shelf" },
+    "facing=south,waterlogged=true": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 180 },
+    "facing=west,waterlogged=true": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 270 },
+    "facing=east,waterlogged=true": { "model": "glass-shelf:block/cherry_glass_shelf", "y": 90 }
+  }
+}

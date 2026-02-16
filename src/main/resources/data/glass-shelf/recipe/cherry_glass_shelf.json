@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "   ",
+    "OOO"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "O": "minecraft:stripped_cherry_log"
+  },
+  "result": {
+    "id": "glass-shelf:cherry_glass_shelf",
+    "count": 1
+  }
+}

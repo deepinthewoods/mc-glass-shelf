@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -21,6 +23,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.level.gameevent.DynamicGameEventListener;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -28,19 +35,41 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
-public class GlassShelfBlockEntity extends BlockEntity implements ItemOwner {
+public class GlassShelfBlockEntity extends BlockEntity implements ItemOwner, GameEventListener.Provider<GameEventListener> {
 	public static final int MAX_DISPLAY_ITEMS = 9;
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final NonNullList<ItemStack> displayItems = NonNullList.withSize(MAX_DISPLAY_ITEMS, ItemStack.EMPTY);
 	private static final int FALLBACK_INTERVAL = 200;
 	private int tickCounter;
+	private boolean listenerRegistered;
+	private final ContainerCloseListener containerCloseListener;
+	private final DynamicGameEventListener<ContainerCloseListener> dynamicListener;
 
 	public GlassShelfBlockEntity(BlockPos pos, BlockState state) {
 		super(GlassShelf.GLASS_SHELF_BLOCK_ENTITY, pos, state);
 		this.tickCounter = Math.floorMod(pos.hashCode(), FALLBACK_INTERVAL);
+		this.containerCloseListener = new ContainerCloseListener(pos);
+		this.dynamicListener = new DynamicGameEventListener<>(this.containerCloseListener);
+	}
+
+	@Override
+	public void setRemoved() {
+		if (this.level instanceof ServerLevel serverLevel) {
+			this.dynamicListener.remove(serverLevel);
+		}
+		super.setRemoved();
+	}
+
+	@Override
+	public GameEventListener getListener() {
+		return this.containerCloseListener;
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GlassShelfBlockEntity entity) {
+		if (!entity.listenerRegistered && level instanceof ServerLevel serverLevel) {
+			entity.dynamicListener.add(serverLevel);
+			entity.listenerRegistered = true;
+		}
 		entity.tickCounter++;
 		if (entity.tickCounter < FALLBACK_INTERVAL) return;
 		entity.tickCounter = 0;
@@ -169,5 +198,32 @@ public class GlassShelfBlockEntity extends BlockEntity implements ItemOwner {
 	@Override
 	public float getVisualRotationYInDegrees() {
 		return ((Direction)this.getBlockState().getValue(GlassShelfBlock.FACING)).getOpposite().toYRot();
+	}
+
+	private class ContainerCloseListener implements GameEventListener {
+		private final PositionSource positionSource;
+
+		ContainerCloseListener(BlockPos pos) {
+			this.positionSource = new BlockPositionSource(pos);
+		}
+
+		@Override
+		public PositionSource getListenerSource() {
+			return this.positionSource;
+		}
+
+		@Override
+		public int getListenerRadius() {
+			return 2;
+		}
+
+		@Override
+		public boolean handleGameEvent(ServerLevel level, Holder<GameEvent> event, GameEvent.Context context, Vec3 pos) {
+			if (event.is(GameEvent.CONTAINER_CLOSE)) {
+				refreshDisplay();
+				return true;
+			}
+			return false;
+		}
 	}
 }

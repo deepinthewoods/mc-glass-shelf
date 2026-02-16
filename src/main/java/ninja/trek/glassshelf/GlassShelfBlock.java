@@ -44,9 +44,9 @@ public class GlassShelfBlock extends BaseEntityBlock implements SimpleWaterlogge
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateHorizontal(
 		Shapes.or(
-			Block.box(0.0, 12.0, 11.0, 16.0, 16.0, 13.0),
-			Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
-			Block.box(0.0, 0.0, 11.0, 16.0, 4.0, 13.0)
+			Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0),
+			Block.box(0.0, 11.0, 14.0, 16.0, 16.0, 15.0),
+			Block.box(0.0, 0.0, 14.0, 16.0, 5.0, 15.0)
 		)
 	);
 

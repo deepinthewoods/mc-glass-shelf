@@ -41,27 +41,36 @@ public class GlassShelfRenderer implements BlockEntityRenderer<GlassShelfBlockEn
 		NonNullList<ItemStack> displayItems = entity.getDisplayItems();
 		int seed = HashCommon.long2int(entity.getBlockPos().asLong());
 
-		for (int i = 0; i < displayItems.size(); i++) {
+		boolean threeItem = GlassShelfConfig.threeItemMode;
+		state.threeItemMode = threeItem;
+		int maxItems = threeItem ? 3 : 9;
+		int count = 0;
+
+		for (int i = 0; i < displayItems.size() && count < maxItems; i++) {
 			ItemStack itemStack = displayItems.get(i);
 			if (!itemStack.isEmpty()) {
-				ItemStackRenderState itemState = new ItemStackRenderState();
-				this.itemModelResolver.updateForTopItem(itemState, itemStack, ItemDisplayContext.ON_SHELF, entity.level(), entity, seed + i);
-				state.items[i] = itemState;
+				this.itemModelResolver.updateForTopItem(state.items[count], itemStack, ItemDisplayContext.ON_SHELF, entity.level(), entity, seed + i);
+				count++;
 			}
 		}
+		state.displayCount = count;
 	}
 
 	public void submit(GlassShelfRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
 		Direction direction = (Direction)state.blockState.getValue(GlassShelfBlock.FACING);
 		float rotation = direction.getAxis().isHorizontal() ? -direction.toYRot() : 180.0F;
 
-		for (int i = 0; i < state.items.length; i++) {
+		for (int i = 0; i < state.displayCount; i++) {
 			ItemStackRenderState itemState = state.items[i];
-			if (itemState != null) {
-				int col = i % 3;
-				int row = i / 3;
-				submitItem(state, itemState, poseStack, collector, col, row, rotation);
+			int col, row;
+			if (state.threeItemMode) {
+				col = i;
+				row = 1;
+			} else {
+				col = i % 3;
+				row = i / 3;
 			}
+			submitItem(state, itemState, poseStack, collector, col, row, rotation);
 		}
 	}
 
@@ -70,8 +79,8 @@ public class GlassShelfRenderer implements BlockEntityRenderer<GlassShelfBlockEn
 		int col, int row, float rotation
 	) {
 		float x = (col - 1) * 0.25F;
-		float y = (1 - row) * 0.25F;
-		float z = -0.25F;
+		float y = (1 - row) * 0.34375F;
+		float z = -0.375F;
 
 		poseStack.pushPose();
 		poseStack.translate(0.5F, 0.5F, 0.5F);
